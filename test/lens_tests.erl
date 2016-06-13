@@ -1,4 +1,4 @@
--module(lens_SUITE).
+-module(lens_tests).
 
 %% Test cases
 
