@@ -44,6 +44,13 @@ accessor_test() ->
     NestedRecord = make_record(not_hoos),
     ?assertEqual(Getter(Setter(NestedRecord, Value)), Value).
 
+transform_test() ->
+    Value = 1,
+    F = fun(X) -> X + 1 end,
+    NestedRecord = make_record(Value),
+    TransformedRecord = lens:transform(NestedRecord, [3,1,1], F),
+    ?assertEqual(lens:get(TransformedRecord, [3,1,1]), F(Value)).
+
 make_record(Value) ->
     #person{address =
             #address{abode = 
