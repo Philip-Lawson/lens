@@ -3,7 +3,8 @@
   {description, "An Erlang mylib library"},
   {vsn, "1"},
   {modules, [
-             lens
+             lens,
+             lens_safe
             ]},
   {registered, []},
   {applications, [

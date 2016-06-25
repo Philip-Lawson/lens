@@ -1,6 +1,5 @@
 -module(lens).
 
-
 -export([get/2,
          getter/1,
          set/3,

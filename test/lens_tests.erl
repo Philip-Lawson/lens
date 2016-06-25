@@ -17,12 +17,19 @@ get_test() ->
     NestedRecord = make_record(Value),
     ?assertEqual(lens:get(NestedRecord, [3,1,1]), Value).
 
+get_error_test() ->
+    NestedRecord = make_record(1),
+    ?assertError(badarg, lens:get(NestedRecord, [3,1,1,1])).
+
 set_test() ->
     Value = house,
     NestedRecord = make_record(apartment),
-    Expected = Value,
-    Actual = lens:get(lens:set(NestedRecord, [3,1,1], Value), [3,1,1]),
-    ?assertEqual(Expected, Actual).
+    NewRecord = lens:set(NestedRecord, [3,1,1], Value), 
+    ?assertEqual(Value, lens:get(NewRecord, [3,1,1])).
+
+set_error_test() ->
+    NestedRecord = make_record(1),
+    ?assertError(badarg, lens:set(NestedRecord, [20], 1)).
 
 getter_test() ->
     Value = apartment,
@@ -33,16 +40,21 @@ getter_test() ->
 setter_test() ->
     Value = house,
     NestedRecord = make_record(apartment),
-    Expected = Value,
     Setter = lens:setter([3,1,1]),
-    Actual = lens:get(Setter(NestedRecord, Value), [3,1,1]),
-    ?assertEqual(Expected, Actual).
+    NewRecord = Setter(NestedRecord, Value),
+    ?assertEqual(Value, lens:get(NewRecord, [3,1,1])).
 
 accessor_test() ->
     Value = hoos,
     {Getter, Setter} = lens:accessors([3,1,1]),
     NestedRecord = make_record(not_hoos),
     ?assertEqual(Getter(Setter(NestedRecord, Value)), Value).
+
+bad_accessor_test() ->
+    Value = hoos,
+    {Getter, Setter} = lens:accessors([3,1,100]),
+    NestedRecord = make_record(not_hoos),
+    ?assertError(badarg, Getter(Setter(NestedRecord, Value))).
 
 transform_test() ->
     Value = 1,
